@@ -60,11 +60,7 @@ const Home: NextPage = () => {
       >
         <h1 className="text-center">Super Wordle!</h1>
       </header>
-      <Keyboard
-        onClick={(letter) => {
-          addGuessLetter(letter);
-        }}
-      />
+
       <main className="grid grid-rows-6 gap-4">
         {rows.map(({ guess, result }, index) => (
           <WordRow
@@ -77,6 +73,11 @@ const Home: NextPage = () => {
           />
         ))}
       </main>
+      <Keyboard
+        onClick={(letter) => {
+          addGuessLetter(letter);
+        }}
+      />
       {isGameOver && (
         <div
           role="modal"
