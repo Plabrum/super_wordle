@@ -50,3 +50,7 @@ export function computeGuess(guessString: string, answerString: string) {
 
   return result;
 }
+
+export function isValidWord(word: string): boolean {
+  return la.includes(word);
+}

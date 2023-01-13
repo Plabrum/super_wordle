@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { WordRow, WORD_LENGTH } from "../Components/WordRow";
 import { useStore } from "../store";
 import testing from "../utils/testing";
+import { isValidWord } from "../utils/word_utils";
 
 const GUESS_QUANTITY = 6;
 
@@ -11,11 +12,35 @@ const Home: NextPage = () => {
   // const tests = testing();
   const state = useStore();
   const [guess, setGuess] = useGuess();
+  const [showInvalidGuess, setInvalidGuess] = useState(false);
+
+  const addGuess = useStore((s) => s.addGuess);
+  const previousGuess = usePrevious(guess);
+
+  useEffect(() => {
+    let id: any;
+    if (showInvalidGuess) {
+      id = setTimeout(() => setInvalidGuess(false), 750);
+    }
+    return () => clearTimeout(id);
+  }, [showInvalidGuess]);
+
+  useEffect(() => {
+    if (guess.length === 0 && previousGuess?.length === WORD_LENGTH) {
+      if (isValidWord(previousGuess)) {
+        addGuess(previousGuess);
+        setInvalidGuess(false);
+      } else {
+        setInvalidGuess(true);
+        setGuess(previousGuess);
+      }
+    }
+  }, [guess]);
 
   let rows = [...state.rows];
-
+  let current_row = 0;
   if (rows.length < GUESS_QUANTITY) {
-    rows.push({ guess });
+    current_row = rows.push({ guess }) - 1;
   }
 
   const isGameOver: boolean = state.gameState !== "playing";
@@ -33,17 +58,17 @@ const Home: NextPage = () => {
       mb-6 py-6 text-xl font-mono"
       >
         <h1 className="text-center">Super Wordle!</h1>
-        {/* <input
-          className="w-full p2 border-2 border-gray-500 "
-          type="text"
-          value={guess}
-          onChange={onChange}
-          disabled={isGameOver}
-        /> */}
       </header>
       <main className="grid grid-rows-6 gap-4">
         {rows.map(({ guess, result }, index) => (
-          <WordRow key={index} letters={guess} result={result} />
+          <WordRow
+            key={index}
+            letters={guess}
+            result={result}
+            className={
+              showInvalidGuess && current_row === index ? "animate-bounce" : ""
+            }
+          />
         ))}
       </main>
       {isGameOver && (
@@ -71,9 +96,7 @@ const Home: NextPage = () => {
 };
 
 function useGuess(): [string, React.Dispatch<React.SetStateAction<string>>] {
-  const addGuess = useStore((s) => s.addGuess);
   const [guess, setGuess] = useState("");
-  const previousGuess = usePrevious(guess);
 
   const onKeyDown = (e: KeyboardEvent) => {
     let letter = e.key;
@@ -104,12 +127,6 @@ function useGuess(): [string, React.Dispatch<React.SetStateAction<string>>] {
       document.removeEventListener("keydown", onKeyDown);
     };
   }, []);
-
-  useEffect(() => {
-    if (guess.length === 0 && previousGuess?.length === WORD_LENGTH) {
-      addGuess(previousGuess);
-    }
-  }, [guess]);
 
   return [guess, setGuess];
 }
