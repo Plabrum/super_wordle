@@ -1,5 +1,5 @@
 import { type } from "os";
-import { computeGuess, LetterState } from "./compute_guess";
+import { computeGuess, LetterState } from "./word_utils";
 
 export default function Testing() {
   function compare_arrays(a: Array<LetterState>, b: Array<LetterState>) {

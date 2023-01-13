@@ -1,16 +1,19 @@
-import { computeGuess, LetterState } from "../utils/compute_guess";
+import { useStore } from "../store";
+import { computeGuess, LetterState } from "../utils/word_utils";
 
-const WORD_LENGTH = 5;
+export const WORD_LENGTH = 5;
 interface WordRowProps {
   letters: string;
 }
-export default function WordRow({ letters: lettersProp = "" }: WordRowProps) {
+export function WordRow({ letters: lettersProp = "" }: WordRowProps) {
+  const answer = useStore((state) => state.answer);
+
   const lettersRemaining = WORD_LENGTH - lettersProp.length;
   const letters = lettersProp
     .split("")
     .concat(Array(lettersRemaining).fill(""));
 
-  const guessState = computeGuess(lettersProp);
+  const guessState = computeGuess(lettersProp, answer);
 
   return (
     <div className="grid grid-cols-5 gap-4">
@@ -26,12 +29,13 @@ interface CharacterBoxProps {
   state?: LetterState;
 }
 function CharacterBox({ value, state }: CharacterBoxProps) {
-  const stateStyles = state == null ? "" : characterStateStyles[state];
+  const stateStyles = state == null ? " " : characterStateStyles[state];
   return (
     <span
       className={`inline-block border-2 border-gray-500 p-4 
     uppercase font-bold text-center text-2xl ${stateStyles}`}
     >
+      {/* This is causing a warning */}
       {value}
     </span>
   );

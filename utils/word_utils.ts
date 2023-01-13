@@ -1,16 +1,18 @@
-import rand_word from "./rand_word";
+import la from "../dictionaries/wordle-La.json";
 
-const word = rand_word();
-console.log(word);
+export function rand_word() {
+  return la[Math.floor(Math.random() * la.length)];
+}
+
 export enum LetterState {
   Miss,
   Present,
   Match,
 }
 
-export function computeGuess(guessString: string, answerString: string = word) {
+export function computeGuess(guessString: string, answerString: string) {
   // Defaul the results to wrong
-  const result: LetterState[] = Array(5).fill(LetterState.Miss);
+  let result: LetterState[] = [];
   // Convert strings to arrays for easy iteration
   const guessArray = guessString.split("");
   const answerArray = answerString.split("");
@@ -20,6 +22,7 @@ export function computeGuess(guessString: string, answerString: string = word) {
   if (guessArray.length != answerString.length) {
     return result;
   }
+  result = Array(5).fill(LetterState.Miss);
 
   function remove_first(remainingArray: Array<string>, value: string) {
     remainingArray.forEach((letter, index) => {
