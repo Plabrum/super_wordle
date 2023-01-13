@@ -4,13 +4,11 @@ import React, { useEffect, useRef, useState } from "react";
 import Keyboard from "../Components/Keyboard";
 import { WordRow, WORD_LENGTH } from "../Components/WordRow";
 import { useStore } from "../store";
-import testing from "../utils/testing";
 import { isValidWord } from "../utils/word_utils";
 
 const GUESS_QUANTITY = 6;
 
 const Home: NextPage = () => {
-  // const tests = testing();
   const state = useStore();
   const [guess, setGuess, addGuessLetter] = useGuess();
   const [showInvalidGuess, setInvalidGuess] = useState(false);
