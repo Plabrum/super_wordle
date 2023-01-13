@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import React, { useEffect, useRef, useState } from "react";
+import Keyboard from "../Components/Keyboard";
 import { WordRow, WORD_LENGTH } from "../Components/WordRow";
 import { useStore } from "../store";
 import testing from "../utils/testing";
@@ -11,7 +12,7 @@ const GUESS_QUANTITY = 6;
 const Home: NextPage = () => {
   // const tests = testing();
   const state = useStore();
-  const [guess, setGuess] = useGuess();
+  const [guess, setGuess, addGuessLetter] = useGuess();
   const [showInvalidGuess, setInvalidGuess] = useState(false);
 
   const addGuess = useStore((s) => s.addGuess);
@@ -59,6 +60,11 @@ const Home: NextPage = () => {
       >
         <h1 className="text-center">Super Wordle!</h1>
       </header>
+      <Keyboard
+        onClick={(letter) => {
+          addGuessLetter(letter);
+        }}
+      />
       <main className="grid grid-rows-6 gap-4">
         {rows.map(({ guess, result }, index) => (
           <WordRow
@@ -95,11 +101,13 @@ const Home: NextPage = () => {
   );
 };
 
-function useGuess(): [string, React.Dispatch<React.SetStateAction<string>>] {
+function useGuess(): [
+  string,
+  React.Dispatch<React.SetStateAction<string>>,
+  (letter: string) => void
+] {
   const [guess, setGuess] = useState("");
-
-  const onKeyDown = (e: KeyboardEvent) => {
-    let letter = e.key;
+  const addGuessLetter = (letter: string) => {
     setGuess((currGuess) => {
       const newGuess = letter.length === 1 ? currGuess + letter : currGuess;
 
@@ -114,10 +122,13 @@ function useGuess(): [string, React.Dispatch<React.SetStateAction<string>>] {
 
       if (currGuess.length === WORD_LENGTH) {
         return currGuess;
-      } else {
-        return newGuess;
       }
+      return newGuess;
     });
+  };
+  const onKeyDown = (e: KeyboardEvent) => {
+    let letter = e.key;
+    addGuessLetter(letter);
   };
 
   useEffect(() => {
@@ -128,7 +139,7 @@ function useGuess(): [string, React.Dispatch<React.SetStateAction<string>>] {
     };
   }, []);
 
-  return [guess, setGuess];
+  return [guess, setGuess, addGuessLetter];
 }
 
 // Hook
