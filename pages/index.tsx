@@ -8,6 +8,33 @@ import { isValidWord } from "../utils/word_utils";
 
 const GUESS_QUANTITY = 6;
 
+function Modal({ gameState }: string) {
+  if (gameState !== "playing") {
+    return (
+      <div
+        role="modal"
+        className="
+          absolute bg-white rounded border-4 border-gray-900 text-center
+          left-0 right-0 top-1/4 p-6 w-3/4 mx-auto"
+      >
+        GAME OVER
+        <button
+          className="block border rounded border-green-500
+             bg-green-500 p-2 mt-4 mx-auto shadow"
+          onClick={() => {
+            state.newGame();
+            setGuess("");
+          }}
+        >
+          New Game
+        </button>
+      </div>
+    );
+  } else {
+    return <div></div>;
+  }
+}
+
 const Home: NextPage = () => {
   const state = useStore();
   const [guess, setGuess, addGuessLetter] = useGuess();
@@ -47,7 +74,7 @@ const Home: NextPage = () => {
   rows = rows.concat(Array(guessRemaining).fill(""));
 
   return (
-    <div className="mx-auto w-96 relative">
+    <div className="mx-auto sm:w-96 w-11/12 relative">
       <Head>
         <title>Super Wordle Demo</title>
         <meta name="description" content="Wordle Demo" />
@@ -76,14 +103,14 @@ const Home: NextPage = () => {
           addGuessLetter(letter);
         }}
       />
-      {isGameOver && (
+      {state.gameState !== "playing" && (
         <div
           role="modal"
           className="
           absolute bg-white rounded border-4 border-gray-900 text-center
           left-0 right-0 top-1/4 p-6 w-3/4 mx-auto"
         >
-          GAME OVER
+          {state.gameState === "won" ? "You Won!" : "Unlucky, Try Again?"}
           <button
             className="block border rounded border-green-500
              bg-green-500 p-2 mt-4 mx-auto shadow"

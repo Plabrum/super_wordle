@@ -4,6 +4,10 @@ export function rand_word() {
   return la[Math.floor(Math.random() * la.length)];
 }
 
+export function words_left({ guesses }: Array<string>) {
+  return guesses;
+}
+
 export enum LetterState {
   Miss,
   Present,
