@@ -59,7 +59,7 @@ const Home: NextPage = () => {
         <h1 className="text-center">Super Wordle!</h1>
       </header>
 
-      <main className="grid grid-rows-6 gap-4">
+      <main className="grid grid-rows-6 gap-4 mb-4">
         {rows.map(({ guess, result }, index) => (
           <WordRow
             key={index}
