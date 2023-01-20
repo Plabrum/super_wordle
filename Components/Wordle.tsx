@@ -18,6 +18,7 @@ export default function Wordle() {
     setTimeout(() => setShake(false), 500);
   };
   const [currentGuess, setCurrentGuess] = useState("");
+  const insertGuess = useStore((s) => s.insertGuess);
 
   const unusedWord = (word: string): boolean => {
     return !state.previousGuesses.includes(word);
