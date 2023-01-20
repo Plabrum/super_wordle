@@ -2,26 +2,23 @@ import React from "react";
 import { useStore } from "../store";
 import { LetterState } from "../utils/word_utils";
 
-interface KeyboardProps {
-  onClick: (key: string) => void;
-}
-
-export default function Keyboard({
-  onClick: onClickProp,
-}: {
-  onClick: (letter: string) => void;
-}) {
+export default function Keyboard(letter_handler: any) {
+  const state = useStore();
   const keyboardLetterState = useStore((s) => s.keyboardLetterState);
   // on button click
-  const onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  //   const onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  //     const letter = e.currentTarget.textContent;
+  //     onClickProp(letter!);
+  //   };
+  function letter_select(e: React.MouseEvent<HTMLButtonElement>): void {
     const letter = e.currentTarget.textContent;
-    onClickProp(letter!);
-  };
+    letter_handler(letter!);
+  }
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col w-96 mx-auto">
       {keyboardKeys.map((keyboardRow, rowIndex) => {
         return (
-          <div key={rowIndex} className="flex justify-center my-2 space-x-1">
+          <div key={rowIndex} className="flex justify-center my-2 space-x-1 ">
             {keyboardRow.map((key, index) => {
               let styles = "rounded font-bold uppercase py-2 flex-1 ";
               const letterState = keyStateStyles[keyboardLetterState[key]];
@@ -33,7 +30,7 @@ export default function Keyboard({
                 styles += "pointer-events-none";
               }
               return (
-                <button key={index} className={styles} onClick={onClick}>
+                <button key={index} className={styles} onClick={letter_select}>
                   {key}
                 </button>
               );

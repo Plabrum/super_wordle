@@ -4,8 +4,13 @@ export function rand_word() {
   return la[Math.floor(Math.random() * la.length)];
 }
 
-export function words_left({ guesses }: Array<string>) {
-  return guesses;
+export function words_left(letterDict: { [letter: string]: LetterState }) {
+  const regex = new RegExp("/contact\\b", "g");
+  const remaing_words = la.filter((word) => word.match(regex));
+  const quantity = remaing_words.length;
+  console.log("words_left", quantity);
+
+  return quantity;
 }
 
 export enum LetterState {
