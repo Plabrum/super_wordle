@@ -2,17 +2,16 @@ import React from "react";
 import { useStore } from "../store";
 import { LetterState } from "../utils/word_utils";
 
-export default function Keyboard(letter_handler: any) {
+interface KeyboardProps {
+  addGuessLetter: Function;
+}
+
+export default function Keyboard({ addGuessLetter }: KeyboardProps) {
   const state = useStore();
   const keyboardLetterState = useStore((s) => s.keyboardLetterState);
-  // on button click
-  //   const onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-  //     const letter = e.currentTarget.textContent;
-  //     onClickProp(letter!);
-  //   };
   function letter_select(e: React.MouseEvent<HTMLButtonElement>): void {
     const letter = e.currentTarget.textContent;
-    letter_handler(letter!);
+    addGuessLetter(letter!);
   }
   return (
     <div className="flex flex-col sm:w-96 sm:mx-auto mx-4">

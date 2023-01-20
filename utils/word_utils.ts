@@ -1,4 +1,5 @@
 import la from "../dictionaries/wordle-La.json";
+import ta from "../dictionaries/wordle-Ta.json";
 
 export function rand_word() {
   return la[Math.floor(Math.random() * la.length)];
@@ -61,5 +62,5 @@ export function computeGuess(guessString: string, answerString: string) {
 }
 
 export function isValidWord(word: string): boolean {
-  return la.includes(word);
+  return ta.includes(word) || la.includes(word);
 }

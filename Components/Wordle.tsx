@@ -9,17 +9,50 @@ export const WORD_LENGTH = 5;
 
 export default function Wordle() {
   const state = useStore();
-  //   const [showInvalidGuess, setInvalidGuess] = useState(false);
-  let rows = [...state.rows];
-  let current_row = state.guessCount;
-  const currentGameState = state.gameState;
+
+  const [currentGuess, setCurrentGuess] = useState("");
+  const insertGuess = useStore((s) => s.insertGuess);
 
   const unusedWord = (word: string): boolean => {
     return !state.previousGuesses.includes(word);
   };
-  const [currentGuess, addGuessLetter] = useLetterHandler(unusedWord);
-  // Calculate remaining words
-  const remaining: number[] = state.wordsRemaining;
+
+  function addGuessLetter(letter: string): void {
+    let previous: string = " ";
+    setCurrentGuess((curGuess) => {
+      // patch for the double run bug
+      if (curGuess === previous) {
+        return "";
+      }
+
+      const is_text = letter.toUpperCase() != letter.toLowerCase();
+      let proposedGuess =
+        letter.length === 1 && is_text ? curGuess + letter : curGuess;
+      switch (letter) {
+        case "Backspace":
+          return curGuess.slice(0, -1);
+        case "Delete":
+          return "";
+        case " ":
+          return curGuess;
+        case "Enter":
+          if (proposedGuess.length === WORD_LENGTH) {
+            if (isValidWord(proposedGuess) && unusedWord(proposedGuess)) {
+              insertGuess(proposedGuess);
+              previous = proposedGuess;
+              return "";
+            } else {
+              return curGuess;
+            }
+          }
+      }
+      if (proposedGuess.length > WORD_LENGTH) {
+        return curGuess;
+      } else {
+        return proposedGuess;
+      }
+    });
+  }
 
   const onKeyDown = (e: KeyboardEvent) => {
     if (e.key === " ") {
@@ -37,6 +70,11 @@ export default function Wordle() {
     };
   }, []);
 
+  let rows = [...state.rows];
+  let current_row = state.guessCount;
+
+  const remaining: number[] = state.wordsRemaining;
+
   return (
     <main className="grid grid-rows-6 gap-2 z-0">
       {rows.map(({ guess, gradedGuess }, index) => (
@@ -45,60 +83,9 @@ export default function Wordle() {
           letters={index === current_row ? currentGuess : guess}
           gradedGuess={gradedGuess}
           remaining={remaining[index]}
-          //   className={
-          //     // showInvalidGuess && current_row === index ? "animate-bounce" : ""
-          //   }
         />
       ))}
-      <Keyboard letter_handler={addGuessLetter} />
+      <Keyboard addGuessLetter={addGuessLetter} />
     </main>
   );
-}
-
-function useLetterHandler(unusedWord: any): [
-  string,
-  //   React.Dispatch<React.SetStateAction<string>>
-  (letter: string) => void
-] {
-  // Takes a letter and adds it to the current guess
-  const [currentGuess, setCurrentGuess] = useState("");
-  const insertGuess = useStore((s) => s.insertGuess);
-
-  let previous_guess: string = "";
-
-  const addGuessLetter = (letter: string) => {
-    setCurrentGuess((curGuess: string) => {
-      const is_text = letter.toUpperCase() != letter.toLowerCase();
-      let proposedGuess = letter.length === 1 ? curGuess + letter : curGuess;
-      switch (letter) {
-        case "Backspace":
-          return curGuess.slice(0, -1);
-        case " ":
-          return curGuess;
-        case "META":
-          return curGuess;
-        case "Enter":
-          if (proposedGuess.length === WORD_LENGTH) {
-            if (isValidWord(proposedGuess)) {
-              //   avoiding the double add
-              if (proposedGuess !== previous_guess) {
-                previous_guess = proposedGuess;
-                if (unusedWord(proposedGuess)) {
-                  insertGuess(proposedGuess);
-                }
-              }
-
-              return "";
-            }
-          }
-      }
-      if (proposedGuess.length > WORD_LENGTH) {
-        return curGuess;
-      } else {
-        return proposedGuess;
-      }
-    });
-  };
-
-  return [currentGuess, addGuessLetter];
 }
