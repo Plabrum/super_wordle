@@ -38,7 +38,7 @@ function CharacterBox({ value, state }: CharacterBoxProps) {
     state == null ? "border-gray-500 text-black" : characterStateStyles[state];
   return (
     <span
-      className={`inline-block border-2 py-4 uppercase font-bold text-center 
+      className={`inline-block border-2 sm:py-4 py-2 uppercase font-bold text-center 
       text-3xl  ${stateStyles} before:inline-block before:content['-'] rounded-md`}
     >
       {/* This is causing a warning */}
