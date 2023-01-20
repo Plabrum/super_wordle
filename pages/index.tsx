@@ -26,16 +26,18 @@ const Home: NextPage = () => {
         <h3 className="text-center text-sm">
           (but the super bit is yet to come)
         </h3>
+      </div>
+
+      <Wordle />
+      <Modal />
+      <div className="flex">
         <button
-          className="rounded-full px-4  my-2 py-2 bg-red-400 text-white hover:bg-red-600"
+          className="rounded-full px-4 mx-auto my-2 py-2 bg-red-400 text-white hover:bg-red-600"
           onClick={reset_store}
         >
           Reset (testing)
         </button>
       </div>
-
-      <Wordle />
-      <Modal />
     </div>
   );
 };
