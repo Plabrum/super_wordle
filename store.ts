@@ -52,7 +52,18 @@ export const useStore = create<StoreState>()(
           // seems like it can just be r
           const guessedLetter = guess[index];
           const currentLetterState = keyboardLetterState[guessedLetter];
-          keyboardLetterState[guessedLetter] = r;
+          // Make sure higher ranked letters are not replaced
+          switch (currentLetterState) {
+            case LetterState.Match:
+              break;
+            case LetterState.Present:
+              if (r === LetterState.Miss) {
+                break;
+              }
+            default:
+              keyboardLetterState[guessedLetter] = r;
+              break;
+          }
         });
 
         // Calculate how good a guess the word wass
