@@ -9,9 +9,15 @@ export const WORD_LENGTH = 5;
 
 export default function Wordle() {
   const state = useStore();
+  const [shake, setShake] = useState(false);
+  const startShake = () => {
+    // Button begins to shake
+    setShake(true);
 
+    // Buttons stops to shake after 2 seconds
+    setTimeout(() => setShake(false), 500);
+  };
   const [currentGuess, setCurrentGuess] = useState("");
-  const insertGuess = useStore((s) => s.insertGuess);
 
   const unusedWord = (word: string): boolean => {
     return !state.previousGuesses.includes(word);
@@ -42,6 +48,7 @@ export default function Wordle() {
               previous = proposedGuess;
               return "";
             } else {
+              startShake();
               return curGuess;
             }
           }
@@ -83,6 +90,7 @@ export default function Wordle() {
           letters={index === current_row ? currentGuess : guess}
           gradedGuess={gradedGuess}
           remaining={remaining[index]}
+          className={index === current_row && shake ? "animate-bounce" : ""}
         />
       ))}
       <Keyboard addGuessLetter={addGuessLetter} />

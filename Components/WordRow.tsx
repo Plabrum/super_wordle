@@ -39,7 +39,7 @@ function CharacterBox({ value, state }: CharacterBoxProps) {
   return (
     <span
       className={`inline-block border-2 py-4 uppercase font-bold text-center 
-      lg:text-2xl text-md  ${stateStyles} before:inline-block before:content['-'] rounded-md`}
+      text-3xl  ${stateStyles} before:inline-block before:content['-'] rounded-md`}
     >
       {/* This is causing a warning */}
       {value}

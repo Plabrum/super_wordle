@@ -7,7 +7,6 @@ interface KeyboardProps {
 }
 
 export default function Keyboard({ addGuessLetter }: KeyboardProps) {
-  const state = useStore();
   const keyboardLetterState = useStore((s) => s.keyboardLetterState);
   function letter_select(e: React.MouseEvent<HTMLButtonElement>): void {
     const letter = e.currentTarget.textContent;
