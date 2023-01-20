@@ -15,7 +15,7 @@ export default function Keyboard(letter_handler: any) {
     letter_handler(letter!);
   }
   return (
-    <div className="flex flex-col w-96 mx-auto">
+    <div className="flex flex-col sm:w-96 sm:mx-auto mx-4">
       {keyboardKeys.map((keyboardRow, rowIndex) => {
         return (
           <div key={rowIndex} className="flex justify-center my-2 space-x-1 ">

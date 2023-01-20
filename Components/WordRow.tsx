@@ -19,17 +19,11 @@ export function WordRow({
     .concat(Array(lettersRemaining).fill(""));
 
   return (
-    <div className="grid sm:grid-cols-3 grid-cols-12">
-      <div className="sm:col-span-1 col-span-1"></div>
-      <div
-        className={`sm:col-span-1 col-span-10 float-right grid grid-cols-5 sm:gap-4 gap-2 sm:w-96  ${className}`}
-      >
+    <div className="mx-6 ">
+      <div className={`grid grid-cols-5 gap-2 sm:w-96 sm:mx-auto ${className}`}>
         {letters.map((char, ind) => (
           <CharacterBox key={ind} value={char} state={gradedGuess[ind]} />
         ))}
-      </div>
-      <div className="col-span-1 flex">
-        <h1 className="inline-block text-sm mx-1 m-auto">{remaining}</h1>
       </div>
     </div>
   );

@@ -17,12 +17,28 @@ export default function Wordle() {
   const unusedWord = (word: string): boolean => {
     return !state.previousGuesses.includes(word);
   };
-  const [currentGuess, setCurrentGuess] = useLetterHandler(unusedWord);
+  const [currentGuess, addGuessLetter] = useLetterHandler(unusedWord);
   // Calculate remaining words
   const remaining: number[] = state.wordsRemaining;
 
+  const onKeyDown = (e: KeyboardEvent) => {
+    if (e.key === " ") {
+      e.preventDefault();
+    }
+    let letter = e.key;
+    addGuessLetter(letter);
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, []);
+
   return (
-    <main className="grid grid-rows-6 sm:gap-4 gap-2 sm:mb-4 mb-24 z-0">
+    <main className="grid grid-rows-6 gap-2 z-0">
       {rows.map(({ guess, gradedGuess }, index) => (
         <WordRow
           key={index}
@@ -34,7 +50,7 @@ export default function Wordle() {
           //   }
         />
       ))}
-      <Keyboard letter_handler={setCurrentGuess} />
+      <Keyboard letter_handler={addGuessLetter} />
     </main>
   );
 }
@@ -83,22 +99,6 @@ function useLetterHandler(unusedWord: any): [
       }
     });
   };
-
-  const onKeyDown = (e: KeyboardEvent) => {
-    if (e.key === " ") {
-      e.preventDefault();
-    }
-    let letter = e.key;
-    addGuessLetter(letter);
-  };
-
-  useEffect(() => {
-    document.addEventListener("keydown", onKeyDown);
-
-    return () => {
-      document.removeEventListener("keydown", onKeyDown);
-    };
-  }, []);
 
   return [currentGuess, addGuessLetter];
 }
