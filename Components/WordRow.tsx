@@ -33,17 +33,22 @@ interface CharacterBoxProps {
   value: string;
   state?: LetterState;
 }
+
 function CharacterBox({ value, state }: CharacterBoxProps) {
   const stateStyles =
     state == null ? "border-gray-500 text-black" : characterStateStyles[state];
   return (
-    <span
-      className={`inline-block border-2 sm:py-4 py-2 uppercase font-bold text-center 
-      text-3xl  ${stateStyles} before:inline-block before:content['-'] rounded-md`}
+    <div
+      className={`border-2 flex rounded-md aspect-square justify-center items-center uppercase  ${stateStyles}`}
     >
-      {/* This is causing a warning */}
-      {value}
-    </span>
+      {value ? (
+        <p className=" text-center font-bold  text-3xl">{value}</p>
+      ) : (
+        <p className=" text-transparent text-center font-bold text-3xl">
+          {"_"}
+        </p>
+      )}
+    </div>
   );
 }
 
