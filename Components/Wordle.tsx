@@ -102,7 +102,7 @@ export default function Wordle() {
   // const remaining: number[] = state.wordsRemaining;
 
   return (
-    <main className="grid grid-rows-6 gap-2 z-0">
+    <main className="grid grid-rows-6 gap-2 z-0 sm:w-96 sm:mx-auto w-full">
       {rows.map(({ guess, gradedGuess }, index) => (
         <WordRow
           key={index}

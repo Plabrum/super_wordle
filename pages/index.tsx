@@ -20,12 +20,15 @@ const Home: NextPage = () => {
   return (
     <div className="">
       <Head>
-        <title>Super Wordle Demo</title>
-        <meta name="description" content="Wordle Demo" />
+        <title>Super Wordle</title>
+        <meta
+          name="description"
+          content="Super Wordle is a timed version of the popular wordle game with a public leaderboard"
+        />
       </Head>
       <div
-        className="lg:w-1/2 w-full mx-auto text-center border-b border-b-gray-300 py-4 mt-2
-      mb-6 font-mono content-center grid grid-cols-3 items-center justify-center"
+        className="lg:w-1/2 w-full mx-auto text-center border-b border-b-gray-300 sm:py-6 py-2 
+      sm:mb-10 mb-4 font-mono content-center grid grid-cols-3 items-center justify-center"
       >
         <button
           className="ml-2 justify-self-start rounded-full px-2 py-1 bg-red-300 text-white text-xs hover:bg-red-600"

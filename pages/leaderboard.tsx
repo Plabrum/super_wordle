@@ -14,8 +14,8 @@ export default function leaderboard({ leaderboard }: Props) {
   return (
     <div>
       <Head>
-        <title>Super Wordle Demo</title>
-        <meta name="description" content="Wordle Demo" />
+        <title>Super Wordle Leaderboard</title>
+        <meta name="description" content="Wordle Leaderboard" />
       </Head>
       <div
         className="lg:w-1/2 w-full mx-auto text-center py-4 mt-2

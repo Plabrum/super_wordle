@@ -19,8 +19,8 @@ export function WordRow({
     .concat(Array(lettersRemaining).fill(""));
 
   return (
-    <div className="mx-6 ">
-      <div className={`grid grid-cols-5 gap-2 sm:w-96 sm:mx-auto ${className}`}>
+    <div className="max-sm:mx-6 ">
+      <div className={`grid grid-cols-5 gap-2  ${className}`}>
         {letters.map((char, ind) => (
           <CharacterBox key={ind} value={char} state={gradedGuess[ind]} />
         ))}

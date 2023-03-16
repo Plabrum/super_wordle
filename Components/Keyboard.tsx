@@ -13,7 +13,7 @@ export default function Keyboard({ addGuessLetter }: KeyboardProps) {
     addGuessLetter(letter!);
   }
   return (
-    <div className="flex flex-col sm:w-96 sm:mx-auto mx-4">
+    <div className="flex flex-col  mx-1">
       {keyboardKeys.map((keyboardRow, rowIndex) => {
         return (
           <div key={rowIndex} className="flex justify-center my-2 space-x-1 ">
