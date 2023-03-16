@@ -18,7 +18,7 @@ const Home: NextPage = () => {
   const router = useRouter();
   // const answer = state.answer.split("");
   return (
-    <div className=" relative">
+    <div className="">
       <Head>
         <title>Super Wordle Demo</title>
         <meta name="description" content="Wordle Demo" />

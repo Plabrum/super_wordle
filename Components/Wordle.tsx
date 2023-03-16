@@ -11,6 +11,7 @@ export default function Wordle() {
   // const state = useStore();
   const rows = useStore((store) => store.rows);
   const current_row = useStore((store) => store.guessCount);
+  const gameState = useStore((store) => store.gameState);
   const remaining = useStore((store) => store.wordsRemaining);
   const previousGuesses = useStore((store) => store.previousGuesses);
   const [shake, setShake] = useState(false);
@@ -86,12 +87,14 @@ export default function Wordle() {
   };
 
   useEffect(() => {
-    document.addEventListener("keydown", onKeyDown);
+    if (gameState === "playing") {
+      document.addEventListener("keydown", onKeyDown);
 
-    return () => {
-      document.removeEventListener("keydown", onKeyDown);
-    };
-  }, []);
+      return () => {
+        document.removeEventListener("keydown", onKeyDown);
+      };
+    }
+  }, [gameState]);
 
   // let rows = [...state.rows];
   // let current_row = state.guessCount;

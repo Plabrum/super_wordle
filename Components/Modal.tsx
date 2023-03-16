@@ -1,17 +1,51 @@
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import { useStore } from "../store";
 import { format_time } from "../utils/time_uils";
 // import { LetterState } from "../utils/word_utils";
 // import { WORD_LENGTH } from "./Wordle";
 // import { WordRow } from "./WordRow";
 
+import supabase from "../utils/supabaseClient";
+import { useRouter } from "next/router";
+
+// Create a single supabase client for interacting with your database
+
+// async function add_time(time: string, time_str: string, name: string) {
+//   error && console.log("error", error);
+// }
 export default function Modal() {
+  const router = useRouter();
+  const [name, setName] = useState<string | null>(null);
+  const [response, setResponse] = useState<string | null>(null);
+
   const state = useStore();
   const gameState: string = state.gameState;
-  //   const answer: string = state.answer;
   const answer = state.answer.split("");
   const endTime = useStore((store) => store.endTime);
+  async function handleSubmit(event: any) {
+    if (endTime && name) {
+      const timestamp = new Date(endTime).toISOString();
+      const { error } = await supabase.from("leaderboard").insert({
+        name: name,
+        time_string: format_time(endTime),
+        time: timestamp,
+      });
+
+      if (error) {
+        setResponse("Error Submitting Name");
+        console.log("Error", error);
+      } else {
+        router.push("/leaderboard");
+        state.newGame();
+        setResponse("Success");
+      }
+    } else if (!name) {
+      setResponse("Please enter a name");
+    } else {
+      console.log("null endtime...?");
+    }
+  }
 
   return (
     <div className="fixed top-0 left-0 right-0 h-screen w-screen backdrop-blur-sm bg-black/30">
@@ -48,12 +82,38 @@ export default function Modal() {
           </div>
         )}
         {gameState === "won" && (
-          <Link
-            href="/leaderboard"
-            className="font-bold font-sm bg-green-500 text-white px-4 py-2 rounded-full"
+          <form
+            className="flex flex-col px-2 py-4  space-y-2 items-center bg-green-500 rounded-2xl"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSubmit(e);
+            }}
           >
-            Add Time to Leaderboard
-          </Link>
+            <input
+              className="border rounded-lg text-center px-2 py-1"
+              placeholder="Player Name "
+              type="text"
+              value={name || ""}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <button
+              className="font-bold font-sm text-white px-4 "
+              type="submit"
+            >
+              Add Time to Leaderboard
+            </button>
+          </form>
+        )}
+        {gameState === "won" && response && (
+          <div
+            className={
+              response === "Success"
+                ? "bg-blue-500 text-white px-4 py-1 rounded-md"
+                : "bg-red-400 text-white px-4 py-1 rounded-md"
+            }
+          >
+            {response}
+          </div>
         )}
 
         <button
