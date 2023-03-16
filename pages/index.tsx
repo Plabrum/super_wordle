@@ -1,43 +1,50 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import React from "react";
+import GameStart from "../Components/GameStart";
 // import Keyboard from "../Components/Keyboard";
 import Modal from "../Components/Modal";
 import Wordle from "../Components/Wordle";
 import { useStore, reset_store } from "../store";
+import { useRouter } from "next/router";
+import Timer from "../Components/Timer";
 
 export const GUESS_QUANTITY = 6;
 export const WORD_LENGTH = 5;
 
 const Home: NextPage = () => {
-  // console.log("Answer", state.answer);
+  const gameState: string = useStore((store) => store.gameState);
 
+  const router = useRouter();
+  // const answer = state.answer.split("");
   return (
-    <div className="mx-auto relative">
+    <div className="">
       <Head>
         <title>Super Wordle Demo</title>
         <meta name="description" content="Wordle Demo" />
       </Head>
       <div
-        className=" text-gray-700 border-b border-b-gray-300 
-      mb-6  text-xl font-mono w-96 mx-auto content-center flex flex-col items-center"
+        className="lg:w-1/2 w-full mx-auto text-center border-b border-b-gray-300 py-4 mt-2
+      mb-6 font-mono content-center grid grid-cols-3 items-center justify-center"
       >
-        <h1 className="text-center mt-4 font-bold">Super Wordle!</h1>
-        <h3 className="text-center text-sm">
-          (but the super bit is yet to come)
-        </h3>
-      </div>
-
-      <Wordle />
-      <Modal />
-      <div className="flex">
         <button
-          className="rounded-full px-4 mx-auto mt-16 py-2 bg-red-400 text-white hover:bg-red-600"
-          onClick={reset_store}
+          className="ml-2 justify-self-start rounded-full px-2 py-1 bg-red-300 text-white text-xs hover:bg-red-600"
+          onClick={() => {
+            reset_store();
+            router.reload();
+          }}
         >
-          Reset (testing)
+          Restart
         </button>
+        <h1 className=" text-gray-700 md:text-3xl text-xl whitespace-nowrap justify-self-center font-bold">
+          Super Wordle
+        </h1>
+
+        <Timer />
       </div>
+      <Wordle />
+      {"won lost".includes(gameState) && <Modal />}
+      {gameState == "preGame" && <GameStart />}
     </div>
   );
 };
