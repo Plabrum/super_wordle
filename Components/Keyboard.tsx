@@ -1,6 +1,7 @@
 import React from "react";
 import { useStore } from "../store";
 import { LetterState } from "../utils/word_utils";
+import { BackspaceIcon } from "@heroicons/react/24/solid";
 
 interface KeyboardProps {
   addGuessLetter: Function;
@@ -22,16 +23,32 @@ export default function Keyboard({ addGuessLetter }: KeyboardProps) {
               const letterState = keyStateStyles[keyboardLetterState[key]];
               if (letterState) {
                 styles += ` ${letterState}`;
+              } else if (key === "Enter") {
+                styles += "px-1 bg-gray-400";
               } else if (key !== "") {
-                styles += "bg-gray-400";
+                styles += " bg-gray-400";
               } else if (key === "") {
-                styles += "pointer-events-none";
+                styles += " pointer-events-none";
               }
-              return (
-                <button key={index} className={styles} onClick={letter_select}>
-                  {key}
-                </button>
-              );
+              if (key === "Backspace") {
+                return (
+                  <BackspaceIcon
+                    key={index}
+                    className="sm:h-10 sm:w-10 w-8 h-8 my-auto text-gray-400"
+                    onClick={() => addGuessLetter("Backspace")}
+                  />
+                );
+              } else {
+                return (
+                  <button
+                    key={index}
+                    className={styles}
+                    onClick={letter_select}
+                  >
+                    {key}
+                  </button>
+                );
+              }
             })}
           </div>
         );
@@ -42,8 +59,8 @@ export default function Keyboard({ addGuessLetter }: KeyboardProps) {
 
 const keyboardKeys = [
   ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
-  ["", "a", "s", "d", "f", "g", "h", "j", "k", "l", ""],
-  ["Enter", "z", "x", "c", "v", "b", "n", "m", "Backspace"],
+  ["", "a", "s", "d", "f", "g", "h", "j", "k", "l", "Backspace"],
+  ["", "z", "x", "c", "v", "b", "n", "m", "Enter"],
 ];
 
 const keyStateStyles = {
